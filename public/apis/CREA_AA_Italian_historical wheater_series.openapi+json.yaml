@@ -1,0 +1,123 @@
+openapi: 3.0.1
+info:
+  title: CREA AA Italian historical wheater series
+  description: A large collection of historical weather data curated by CREA-AA.
+  version: '1.0'
+servers:
+  - url: 'https://api.anaee.eu/crea-aa-dailymeteo'
+paths:
+  /getRasterData:
+    post:
+      tags:
+        - wheater
+        - Italy
+        - raster
+        - historical data
+      summary: Historical Raster Data
+      description: >-
+        This API allows programmatic access to an extensive collection of
+        historical weather series covering the whole Italian territory with 10
+        km resolution, starting from 1961.
+      operationId: post-getrasterdata
+      requestBody:
+        description: >-
+          The request payload must be a well formatted JSON including at least a
+          start date.
+
+          Optional parameters include an end date, an area of interest expressed
+          in WKT format, a reference timezone, and filters on the desired series
+          and points to be considered.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/getStations_CREA'
+            example:
+              startTime: '2016-09-16T00:00:00.0000000+00:00'
+              endTime: '2016-09-18T00:00:00.0000000+00:00'
+              wkt: >-
+                POLYGON((10.90409785221798 44.30484478153003,10.66239863346798
+                44.42265911183206,10.66789179753048
+                44.66148418831872,10.85465937565548
+                44.72786742900223,11.05790644596798
+                44.78247884124713,11.04142695378048
+                45.314166848104314,10.96452265690548
+                45.356642784492756,10.98100214909298
+                45.572389969686256,11.45890742253048
+                45.65308230226008,11.45890742253048
+                45.31802961340594,11.36552363346798
+                45.27939011142026,11.38749628971798
+                44.798072622487574,11.78300410221798
+                44.65757692202672,11.76103144596798
+                44.245848768884706,11.38200312565548
+                44.23404245893648,11.23918086003048
+                44.35592674819006,11.09635859440548
+                44.28518602502541,10.90409785221798 44.30484478153003))
+              mode: json
+      responses:
+        '200':
+          description: 'null'
+components:
+  schemas:
+    getStations_CREA:
+      required:
+        - startTime
+      type: object
+      properties:
+        startTime:
+          type: string
+          description: start time of the interval of interest
+        endTime:
+          type: string
+          description: 'end time of the interval of interest '
+        country:
+          type: string
+          description: A country identifier to limit to the spatial search
+        group:
+          type: string
+          description: A group of stations to limit to the scope of the spatial search
+        stations:
+          type: array
+          items:
+            type: string
+          description: >-
+            An array of station identifiers to limit to the scope of the spatial
+            search
+        wkt:
+          type: string
+          description: Area of interest expressed in WKT format
+        timezone:
+          type: string
+          description: The timezone to which startTime and endTime refer to.
+        mode:
+          enum:
+            - CSV
+            - csv
+            - Csv
+            - Comma Separated Values
+            - comma separated values
+            - JSON
+            - json
+            - Json
+            - JavaScript Object Notation
+            - javascript object notation
+            - JSONCSV
+            - JSON-CSV
+            - jsoncsv
+            - json-csv
+            - Json-Csv
+            - jsonCsv
+            - JsonCsv
+          type: string
+          description: the desired output format.
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: []
+  - apiKeyQuery: []

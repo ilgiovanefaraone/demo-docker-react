@@ -1,0 +1,399 @@
+openapi: 3.0.1
+info:
+  title: Model APIs
+  description: APIs to configure and run model executions
+  version: v1
+servers:
+  - url: 'https://apim-hello-world-davide.azure-api.net/model/v1'
+paths:
+  /GetIterated:
+    get:
+      tags:
+        - models iteration
+      summary: Returns a configuration to run a model iteration
+      description: >-
+        Returns a configuration to run a model iteration, leaving the model to
+        be iterated empty for futher configuration
+      operationId: get-getiterated
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - models iteration
+      summary: Returns the configuration to iterate a model's execution
+      description: >-
+        Returns the configuration to iterate a model's execution. The model to
+        iterate is contained in the body request
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+            examples:
+              simpleIteration:
+                summary: Iteration of a single Model run
+                value: '{ "@type":
+                  "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator,
+                  BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0,
+                  Culture=neutral, PublicKeyToken=null", "ModelRunner": {
+                  "@type":
+                  "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner,
+                  BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0,
+                  Culture=neutral, PublicKeyToken=null" } }'
+              doubleIteration:
+                summary: Iteration of an already iterated Model run
+                value: '{ "@type":
+                  "BioMA.ModelRunnerComposers.NetFramework.ModelRunnerConfigurationIterator,
+                  BioMA.ModelRunnerComposers.NetFramework, Version=1.0.0.0,
+                  Culture=neutral, PublicKeyToken=null",
+                  "DecoratedModelRunnerConfigurator": { "@type":
+                  "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator,
+                  BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0,
+                  Culture=neutral, PublicKeyToken=null", "ModelRunner": {
+                  "@type":
+                  "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner,
+                  BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0,
+                  Culture=neutral, PublicKeyToken=null" } },
+                  "IncrementSimulationId": false, "IncrementSimulationDirId":
+                  false }'
+      operationId: post-getiterated
+      responses:
+        '200':
+          description: ''
+  /SetComplexObject:
+    post:
+      tags:
+        - models configuration
+      summary: >-
+        Sets, in the configuration passed as parameter, an instance of the user
+        defined type passed as parameter
+      operationId: post-setcomplexobject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplexObjectSetting'
+            examples:
+              weather:
+                summary: The weather reader for the model
+                value:
+                  type: "BioMA.WeatherProviders.NetFramework.JsonWeatherReader, BioMA.WeatherProviders.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                  keyList: "WeatherProvider"
+                  objectIn: '{
+                            "@type": "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                            "ModelRunner": {
+                              "@type": "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner, BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                            }
+                          }'
+              soil:
+                summary: The soil reader for the model
+                value:
+                  type: "BioMA.SoilReader.Implementations.NetFramework.JsonSoilReader, BioMA.SoilReader.Implementations.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                  keyList: "SoilDataProvider"
+                  objectIn: '{
+                          "@type": "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                          "ModelRunner": {
+                            "@type": "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner, BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                          },
+                          "WeatherProvider": {
+                            "@type": "BioMA.WeatherProviders.NetFramework.JsonWeatherReader, BioMA.WeatherProviders.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                          }
+                        }'
+      responses:
+        '200':
+          description: 'Successful Operation'
+  /ListModels:
+    get:
+      tags:
+        - models documentation
+      summary: List of available Models
+      description: List of Models available for execution
+      operationId: get-listmodels
+      responses:
+        '200':
+          description: 'Successful Operation'
+  /GetIteratedOnLocations:
+    get:
+      tags:
+        - models iteration
+      summary: Returns a configuration to run a model iteration on Locations
+      description: >-
+        Returns a configuration to run a model iteration on Locations, leaving the model to
+        be iterated empty for futher configuration
+      operationId: get-getiteratedonlocations
+      responses:
+        '200':
+          description: ''
+    post:
+      tags:
+        - models iteration
+      summary: Returns the configuration to iterate on Locations a model's execution
+      description: >-
+        Returns the configuration to iterate on Locations a model's execution. The model to
+        iterate is contained in the body request
+      operationId: post-getiteratedonlocations
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+            examples:
+              nonConfigured:
+                summary: Non configured model
+                value: '{
+                        "@type": "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                        "ModelRunner": {
+                          "@type": "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner, BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                        }
+                      }'
+              configured:
+                summary: Configured model
+                value: '{
+                        "@type": "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                        "ModelRunner": {
+                          "@type": "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner, BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                        },
+                        "WeatherProvider": {
+                          "@type": "BioMA.WeatherProviders.NetFramework.JsonWeatherReader, BioMA.WeatherProviders.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                        },
+                        "SoilDataProvider": {
+                          "@type": "BioMA.SoilReader.Implementations.NetFramework.JsonSoilReader, BioMA.SoilReader.Implementations.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                        }
+                      }'
+      responses:
+        '200':
+          description: 'Successful Operation'
+  /InitialConfiguration:
+    get:
+      tags:
+        - models configuration
+      summary: Get the initial configuration
+      description: >-
+        Returns the (empty) initial configuration for the run of a model
+      operationId: get-initialconfiguration
+      responses:
+        '200':
+          description: ''
+  /ModelExecution:
+    post:
+      tags:
+        - model run
+      summary: ModelExecution
+      operationId: post-modelexecution
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+            examples:
+              singleRun:
+                summary: Single Run
+                value: '{
+  "@type": "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+  "ModelRunner": {
+    "@type": "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner, BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+  },
+  "ModelOutputPersister": {
+    "@type": "BioMA.ModelRunnerInterfaces.NetFramework.JsonModelOutputPersister, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+  },
+  "WeatherProvider": {
+    "@type": "BioMA.WeatherProviders.NetFramework.JsonWeatherReader, BioMA.WeatherProviders.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "Json": "{\r\n  \"locations\": [\r\n    {\r\n      \"Altitude\": 123,\r\n      \"Distance_to_coast\": 1.3,\r\n      \"Grid_no\": \"11082\",\r\n      \"Latitude\": 3.4,\r\n      \"Longitude\": 4.3\r\n    }\r\n  ],\r\n  \"data\": [\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.69,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-01T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.76,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 10.5,\r\n      \"AirTemperatureMinimum\": 1.7,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 36.3,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.67,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-02T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.84,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 10.1,\r\n      \"AirTemperatureMinimum\": -0.8,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.79,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-03T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.66,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 6.6,\r\n      \"AirTemperatureMinimum\": -4.5,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 7.27,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-04T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.67,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 6.3,\r\n      \"AirTemperatureMinimum\": -5.9,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.65,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-05T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.49,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 4.2,\r\n      \"AirTemperatureMinimum\": -4.3,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 8.18,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-06T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.84,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 8.3,\r\n      \"AirTemperatureMinimum\": -6.1,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.21,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-07T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.68,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 7.5,\r\n      \"AirTemperatureMinimum\": -2.0,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.6,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.48,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-08T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.72,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 8.0,\r\n      \"AirTemperatureMinimum\": -2.0,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.7,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.68,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-09T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.63,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 7.3,\r\n      \"AirTemperatureMinimum\": -1.0,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 5.7,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.38,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-10T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.59,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 7.0,\r\n      \"AirTemperatureMinimum\": -0.7,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.2,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    }\r\n  ]\r\n}"
+  },
+  "SoilDataProvider": {
+    "@type": "BioMA.SoilReader.Implementations.NetFramework.JsonSoilReader, BioMA.SoilReader.Implementations.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "Json": "{\r\n  \"11082\": {\r\n    \"StrategyUsed\": [],\r\n    \"SoilProfileName\": null,\r\n    \"SoilProfileDescription\": null,\r\n    \"BottomDepth\": [],\r\n    \"HorizonThickness\": [0.2, 0.3, 0.7],\r\n    \"VolumetricWaterContentAtSaturation\": [\r\n      0.505865862,\r\n      0.523615921\r\n    ],\r\n    \"VolumetricWiltingPoint\": [\r\n      0.18359693,\r\n      0.241656807\r\n    ],\r\n    \"VolumetricFieldCapacity\": [\r\n      0.331677592,\r\n      0.387827103\r\n    ],\r\n    \"SaturatedHydraulicConductivity\": [],\r\n    \"BulkDensityMax\": [],\r\n    \"Clay\": [0.3, 0.1, 0.4],\r\n    \"Sand\": [0.2, 0.3, 0.4],\r\n    \"Silt\": [0.5, 0.6, 0.2],\r\n    \"Skeleton\": [],\r\n    \"OrganicCarbon\": [],\r\n    \"VanGenuchtenAlpha\": [],\r\n    \"VanGenuchtenN\": [],\r\n    \"VanGenuchtenM\": [],\r\n    \"VanGenuchtenLMualem\": [],\r\n    \"VanGenuchtenSWCres\": [],\r\n    \"NumberOfLayers\": 2,\r\n    \"LayerThickness\": [],\r\n    \"ManureMineralizationConstantRate\": 0.0,\r\n    \"LitterMineralizationConstantRate\": \"NaN\",\r\n    \"FieldLenght\": \"NaN\",\r\n    \"FieldSlope\": \"NaN\",\r\n    \"FieldWidth\": \"NaN\",\r\n    \"VolumetricWaterContent\": [],\r\n    \"BulkDensity\": [],\r\n    \"CarbonInHumus\": null,\r\n    \"Ammonia\": [],\r\n    \"Nitrate\": [],\r\n    \"Urea\": [],\r\n    \"CarbonInLitter\": [],\r\n    \"CNRatioOfLitter\": [],\r\n    \"CarbonInManure\": [],\r\n    \"CNRatioOfManure\": [],\r\n    \"Date\": \"0001-01-01T00:00:00\",\r\n    \"WaterTableDepth\": \"NaN\",\r\n    \"NitrateConcentration\": \"NaN\",\r\n    \"Salinity\": \"NaN\"\r\n  }\r\n}"
+  },
+  "Location": "11082"
+}'
+              iteratedRun:
+                summary: Iterated Run
+                value: '{
+    "@type": "BioMA.ModelRunnerComposers.NetFramework.ModelRunnerConfigurationIterator, BioMA.ModelRunnerComposers.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "IteratedValuesProvider": {
+        "@type": "BioMA.ModelRunnerComposers.NetFramework.FixedListLocationsProvider, BioMA.ModelRunnerComposers.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+        "IteratedValues": ["11082", "11083"]
+    },
+    "DataCollectionAggregator": {
+        "@type": "BioMA.ModelRunnerComposers.NetFramework.AppendDataCollectionAggregator, BioMA.ModelRunnerComposers.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+  "DecoratedModelRunnerConfigurator": {
+    "@type": "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+    "ModelOutputPersister": {
+      "@type": "BioMA.ModelRunnerInterfaces.NetFramework.JsonModelOutputPersister, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    "ModelRunner": {
+      "@type": "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner, BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+    },
+    "WeatherProvider": {
+      "@type": "BioMA.WeatherProviders.NetFramework.JsonWeatherReader, BioMA.WeatherProviders.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Json": "{\r\n  \"locations\": [\r\n    {\r\n      \"Altitude\": 123,\r\n      \"Distance_to_coast\": 1.3,\r\n      \"Grid_no\": \"11082\",\r\n      \"Latitude\": 3.4,\r\n      \"Longitude\": 4.3\r\n    },\r\n    {\r\n      \"Altitude\": 123,\r\n      \"Distance_to_coast\": 1.3,\r\n      \"Grid_no\": \"11083\",\r\n      \"Latitude\": 3.4,\r\n      \"Longitude\": 4.3\r\n    }\r\n  ],\r\n  \"data\": [\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.69,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-01T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.76,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 10.5,\r\n      \"AirTemperatureMinimum\": 1.7,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 36.3,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.67,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-02T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.84,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 10.1,\r\n      \"AirTemperatureMinimum\": -0.8,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.79,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-03T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.66,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 6.6,\r\n      \"AirTemperatureMinimum\": -4.5,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 7.27,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-04T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.67,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 6.3,\r\n      \"AirTemperatureMinimum\": -5.9,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.65,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-05T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.49,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 4.2,\r\n      \"AirTemperatureMinimum\": -4.3,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 8.18,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-06T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.84,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 8.3,\r\n      \"AirTemperatureMinimum\": -6.1,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.21,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-07T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.68,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 7.5,\r\n      \"AirTemperatureMinimum\": -2.0,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.6,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.48,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-08T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.72,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 8.0,\r\n      \"AirTemperatureMinimum\": -2.0,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.7,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.68,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-09T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.63,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 7.3,\r\n      \"AirTemperatureMinimum\": -1.0,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 5.7,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.38,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-10T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.59,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11082\",\r\n      \"AirTemperatureMaximum\": 7.0,\r\n      \"AirTemperatureMinimum\": -0.7,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.2,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.65,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-01T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.76,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11083\",\r\n      \"AirTemperatureMaximum\": 10.5,\r\n      \"AirTemperatureMinimum\": 1.8,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 34.3,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.8,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-02T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.86,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11083\",\r\n      \"AirTemperatureMaximum\": 10.4,\r\n      \"AirTemperatureMinimum\": -0.8,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.83,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-03T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.68,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11083\",\r\n      \"AirTemperatureMaximum\": 6.8,\r\n      \"AirTemperatureMinimum\": -4.4,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 7.31,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-04T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.69,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11083\",\r\n      \"AirTemperatureMaximum\": 6.5,\r\n      \"AirTemperatureMinimum\": -5.8,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.7,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-05T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.5,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11083\",\r\n      \"AirTemperatureMaximum\": 4.4,\r\n      \"AirTemperatureMinimum\": -4.2,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 8.14,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-06T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.84,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11083\",\r\n      \"AirTemperatureMaximum\": 8.4,\r\n      \"AirTemperatureMinimum\": -5.9,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.0,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.11,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-07T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.66,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11083\",\r\n      \"AirTemperatureMaximum\": 7.4,\r\n      \"AirTemperatureMinimum\": -1.9,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.7,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 6.44,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-08T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.72,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11083\",\r\n      \"AirTemperatureMaximum\": 8.0,\r\n      \"AirTemperatureMinimum\": -1.9,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.7,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.62,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-09T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.62,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11083\",\r\n      \"AirTemperatureMaximum\": 7.3,\r\n      \"AirTemperatureMinimum\": -0.9,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 5.4,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    },\r\n    {\r\n      \"IsCO2Present\": false,\r\n      \"GlobalSolarRadiation\": 5.32,\r\n      \"SurfaceOzoneConcentration\": 0.0,\r\n      \"Date\": \"1986-01-10T00:00:00\",\r\n      \"ReferenceEvapotranspiration\": 0.59,\r\n      \"SoilEvaporation\": 0.0,\r\n      \"Grid_no\": \"11083\",\r\n      \"AirTemperatureMaximum\": 7.0,\r\n      \"AirTemperatureMinimum\": -0.6,\r\n      \"Average_temperature\": 0.0,\r\n      \"Precipitation\": 0.2,\r\n      \"SnowDepth\": 0.0,\r\n      \"VapourPressureDeficit\": 0.0,\r\n      \"Windspeed\": 0.0,\r\n      \"AirRelativeHumidityMaximum\": 1.0,\r\n      \"AirRelativeHumidityMinimum\": 0.5,\r\n      \"IsHumidityPresent\": false,\r\n      \"IsVpdPresent\": false,\r\n      \"IsEvapotrPresent\": false,\r\n      \"LeafWetnessDuration\": 0,\r\n      \"WaterTemperatureMaximum\": 0.0,\r\n      \"WaterTemperatureMinimum\": 0.0,\r\n      \"CO2concentration\": 0.0,\r\n      \"AtmosphericPressure\": 0.0\r\n    }\r\n  ]\r\n}"
+    },
+    "SoilDataProvider": {
+      "@type": "BioMA.SoilReader.Implementations.NetFramework.JsonSoilReader, BioMA.SoilReader.Implementations.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Json": "{\r\n  \"11082\": {\r\n    \"StrategyUsed\": [],\r\n    \"SoilProfileName\": null,\r\n    \"SoilProfileDescription\": null,\r\n    \"BottomDepth\": [],\r\n    \"HorizonThickness\": [0.2, 0.3, 0.7],\r\n    \"VolumetricWaterContentAtSaturation\": [\r\n      0.505865862,\r\n      0.523615921\r\n    ],\r\n    \"VolumetricWiltingPoint\": [\r\n      0.18359693,\r\n      0.241656807\r\n    ],\r\n    \"VolumetricFieldCapacity\": [\r\n      0.331677592,\r\n      0.387827103\r\n    ],\r\n    \"SaturatedHydraulicConductivity\": [],\r\n    \"BulkDensityMax\": [],\r\n    \"Clay\": [0.3, 0.1, 0.4],\r\n    \"Sand\": [0.2, 0.3, 0.4],\r\n    \"Silt\": [0.5, 0.6, 0.2],\r\n    \"Skeleton\": [],\r\n    \"OrganicCarbon\": [],\r\n    \"VanGenuchtenAlpha\": [],\r\n    \"VanGenuchtenN\": [],\r\n    \"VanGenuchtenM\": [],\r\n    \"VanGenuchtenLMualem\": [],\r\n    \"VanGenuchtenSWCres\": [],\r\n    \"NumberOfLayers\": 2,\r\n    \"LayerThickness\": [],\r\n    \"ManureMineralizationConstantRate\": 0.0,\r\n    \"LitterMineralizationConstantRate\": \"NaN\",\r\n    \"FieldLenght\": \"NaN\",\r\n    \"FieldSlope\": \"NaN\",\r\n    \"FieldWidth\": \"NaN\",\r\n    \"VolumetricWaterContent\": [],\r\n    \"BulkDensity\": [],\r\n    \"CarbonInHumus\": null,\r\n    \"Ammonia\": [],\r\n    \"Nitrate\": [],\r\n    \"Urea\": [],\r\n    \"CarbonInLitter\": [],\r\n    \"CNRatioOfLitter\": [],\r\n    \"CarbonInManure\": [],\r\n    \"CNRatioOfManure\": [],\r\n    \"Date\": \"0001-01-01T00:00:00\",\r\n    \"WaterTableDepth\": \"NaN\",\r\n    \"NitrateConcentration\": \"NaN\",\r\n    \"Salinity\": \"NaN\"\r\n  },\r\n  \"11083\": {\r\n    \"StrategyUsed\": [],\r\n    \"SoilProfileName\": null,\r\n    \"SoilProfileDescription\": null,\r\n    \"BottomDepth\": [],\r\n    \"HorizonThickness\": [0.2, 0.3, 1.1],\r\n    \"VolumetricWaterContentAtSaturation\": [\r\n      0.505865862,\r\n      0.523615921\r\n    ],\r\n    \"VolumetricWiltingPoint\": [\r\n      0.18359693,\r\n      0.241656807\r\n    ],\r\n    \"VolumetricFieldCapacity\": [\r\n      0.331677592,\r\n      0.387827103\r\n    ],\r\n    \"SaturatedHydraulicConductivity\": [],\r\n    \"BulkDensityMax\": [],\r\n    \"Clay\": [0.3, 0.1, 0.4],\r\n    \"Sand\": [0.2, 0.3, 0.4],\r\n    \"Silt\": [0.5, 0.6, 0.2],\r\n    \"Skeleton\": [],\r\n    \"OrganicCarbon\": [],\r\n    \"VanGenuchtenAlpha\": [],\r\n    \"VanGenuchtenN\": [],\r\n    \"VanGenuchtenM\": [],\r\n    \"VanGenuchtenLMualem\": [],\r\n    \"VanGenuchtenSWCres\": [],\r\n    \"NumberOfLayers\": 2,\r\n    \"LayerThickness\": [],\r\n    \"ManureMineralizationConstantRate\": 0.0,\r\n    \"LitterMineralizationConstantRate\": \"NaN\",\r\n    \"FieldLenght\": \"NaN\",\r\n    \"FieldSlope\": \"NaN\",\r\n    \"FieldWidth\": \"NaN\",\r\n    \"VolumetricWaterContent\": [],\r\n    \"BulkDensity\": [],\r\n    \"CarbonInHumus\": null,\r\n    \"Ammonia\": [],\r\n    \"Nitrate\": [],\r\n    \"Urea\": [],\r\n    \"CarbonInLitter\": [],\r\n    \"CNRatioOfLitter\": [],\r\n    \"CarbonInManure\": [],\r\n    \"CNRatioOfManure\": [],\r\n    \"Date\": \"0001-01-01T00:00:00\",\r\n    \"WaterTableDepth\": \"NaN\",\r\n    \"NitrateConcentration\": \"NaN\",\r\n    \"Salinity\": \"NaN\"\r\n  }\r\n}"
+    }
+  },
+    "PathToIteratedVariable": "Location",
+    "IncrementSimulationId": false,
+    "IncrementSimulationDirId": false
+}
+'
+      responses:
+        '200':
+          description: ''
+  /DocumentType:
+    post:
+      tags:
+        - models documentation
+      summary: List of available subtypes for the type in the request body
+      description: >-
+        When passing an Assembly Qualified Name in the request body, a list of
+        all its non-abstract subtypes (in the form of Assembly Qualified Names)
+        is returned. Objects of all this types can be used to populate
+        properties of the type passed as parameter
+      operationId: post-documenttype
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+            examples:
+              configurator:
+                summary: The object used to configure a Model's run
+                value: >-
+                  BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator,
+                  BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0,
+                  Culture=neutral, PublicKeyToken=null
+              weatherReader:
+                summary: The object reading meteo data
+                value: >-
+                  BioMA.WeatherProviderBaseInterfaces.NetFramework.IWeatherProviderBase,
+                  BioMA.WeatherProviderBaseInterfaces.NetFramework,
+                  Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+      responses:
+        '200':
+          description: 'Successful Operation'
+  /SetSimpleObject:
+    post:
+      tags:
+        - models configuration
+      summary: Sets a value for a non user-defined property in the configuration passed as parameter
+      description: >-
+        Sets a value for a non user-defined property in the configuration passed as parameter. The property will be of a primitive type (e.g string, integer, double, date, ...) or a list or array of primitive types, for which the squared bracket notation with comma separated values can be used, e.g. ["string1", "string2", "string3"] or [1.2, 1.3, 1.4]. The property value must be set in the configuration passed in the object named 'objectIn', the property to be set must be identified by the object named 'keyList' (list of properties separated by hyphen), and the value to be set must be passed in the object named 'value'. The call returns the new configuration with the property set.
+      operationId: post-setsimpleobject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimpleObjectSetting'
+            examples:
+              location:
+                summary: Location in Run Configuration
+                value:
+                  value: "Location_1"
+                  keyList: "Location"
+                  objectIn: '{
+                            "@type": "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                            "ModelRunner": {
+                              "@type": "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner, BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                            }
+                          }'
+              locationInIterated:
+                summary: Location in Iterated Run Configuration
+                value:
+                  value: "Location_1"
+                  keyList: "DecoratedModelRunnerConfigurator-Location"
+                  objectIn: '{
+                            "@type": "BioMA.ModelRunnerComposers.NetFramework.ModelRunnerConfigurationIterator, BioMA.ModelRunnerComposers.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                            "DecoratedModelRunnerConfigurator": {
+                              "@type": "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                              "ModelRunner": {
+                                "@type": "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner, BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                              }
+                            },
+                            "IncrementSimulationId": false,
+                            "IncrementSimulationDirId": false
+                          }'
+              locationsInIterated:
+                summary: Locations in Iterated Run Configuration
+                value:
+                  value: '["a","b","c"]'
+                  keyList: "IteratedValuesProvider-IteratedValues"
+                  objectIn: '{
+                            "@type": "BioMA.ModelRunnerComposers.NetFramework.ModelRunnerConfigurationIterator, BioMA.ModelRunnerComposers.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                            "IteratedValuesProvider": {
+                                "@type": "BioMA.ModelRunnerComposers.NetFramework.FixedListLocationsProvider, BioMA.ModelRunnerComposers.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                            },
+                            "DecoratedModelRunnerConfigurator": {
+                                "@type": "BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                                "ModelRunner": {
+                                    "@type": "BioMA.ModelRunnerExample.NetFramework.AverageModelRunner, BioMA.ModelRunnerExample.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+                                }
+                            },
+                            "IncrementSimulationId": false,
+                            "IncrementSimulationDirId": false
+                        }'
+      responses:
+        '200':
+          description: ''
+  /DocumentObject:
+    post:
+      tags:
+        - models documentation
+      summary: Documents all the Configuration Items
+      description: >-
+        Documents all the Configuration Items that must be set for a given user-defined object, in order to run it
+      operationId: post-documentobject
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+            examples:
+              weatherReader:
+                summary: Configuration Items for the JsonWeatherReader
+                value: >-
+                  BioMA.WeatherProviders.NetFramework.JsonWeatherReader,
+                  BioMA.WeatherProviders.NetFramework, Version=1.0.0.0,
+                  Culture=neutral, PublicKeyToken=null
+              modelRunConfiguration:
+                summary: Configuration Items for the Model Run Configuration
+                value: >-
+                  BioMA.ModelRunnerInterfaces.NetFramework.ModelRunnerConfigurator, BioMA.ModelRunnerInterfaces.NetFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+      responses:
+        '200':
+          description: ''
+components:
+  schemas:
+    ComplexObjectSetting:
+      type: object
+      properties:
+        type:
+          type: string
+        keyList:
+          type: string
+        objectIn:
+          type: string
+    SimpleObjectSetting:
+      type: object
+      properties:
+        value:
+          type: string
+        keyList:
+          type: string
+        objectIn:
+          type: string
+  securitySchemes:
+    apiKeyHeader:
+      type: apiKey
+      name: Ocp-Apim-Subscription-Key
+      in: header
+    apiKeyQuery:
+      type: apiKey
+      name: subscription-key
+      in: query
+security:
+  - apiKeyHeader: []
+  - apiKeyQuery: []

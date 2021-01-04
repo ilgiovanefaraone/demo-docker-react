@@ -1,13 +1,13 @@
 {
 	"apis": [
 		{
-			"name": "test 1",
-			"description": "The Death Stars internal library catalog",
+			"name": "BioMA APIs",
+			"description": "BioMA APIs",
 			"tags": [],
 			"properties": [
 				{
 					"type": "Swagger",
-					"url": "test.json"
+					"url": "BioMAAPIs.yaml"
 				},
 				{
 					"type": "X-Version",
@@ -15,11 +15,11 @@
 				},
 				{
 					"type": "X-Created",
-					"value": "2018-07-24T21:07:26Z"
+					"value": "2020-12-21T12:07:26Z"
 				},
 				{
 					"type": "X-Modified",
-					"value": "2018-07-25T00:46:47Z"
+					"value": "2020-12-21T12:07:26Z"
 				},
 				{
 					"type": "X-Published",
@@ -52,25 +52,25 @@
 			]
 		},
 		{
-			"name": "Darth Ship Store",
-			"description": "If you are looking for more information on the ships currently maintained for by The Galactic Empire - youve come to the right place!",
+			"name": "CREA AA Italian historical wheater series",
+			"description": "AA Italian historical wheater series",
 			"tags": [],
 			"properties": [
 				{
 					"type": "Swagger",
-					"url": "https://api.swaggerhub.com/apis/The_Empire/Darth_Ships/1.1.0"
+					"url": "CREA_AA_Italian_historical wheater_series.openapi+json.yaml"
 				},
 				{
 					"type": "X-Version",
-					"value": "1.1.0"
+					"value": "1.0.0"
 				},
 				{
 					"type": "X-Created",
-					"value": "2018-11-27T20:07:18Z"
+					"value": "2020-12-21T12:07:26Z"
 				},
 				{
 					"type": "X-Modified",
-					"value": "2019-10-07T15:54:51Z"
+					"value": "2020-12-21T12:07:26Z"
 				},
 				{
 					"type": "X-Published",
@@ -86,101 +86,7 @@
 				},
 				{
 					"type": "X-Versions",
-					"value": "1.0.0,1.0.0-oas3,*1.1.0,4.0.0"
-				},
-				{
-					"type": "X-Private",
-					"value": "false"
-				},
-				{
-					"type": "X-OASVersion",
-					"value": "2.0"
-				},
-				{
-					"type": "X-Notifications",
-					"value": "false"
-				}
-			]
-		},
-		{
-			"name": "Droid Registry",
-			"description": "Droid Registry - [1.0.0]",
-			"tags": [],
-			"properties": [
-				{
-					"type": "Swagger",
-					"url": "https://api.swaggerhub.com/apis/The_Empire/droid-registry/1.0.0"
-				},
-				{
-					"type": "X-Version",
-					"value": "1.0.0"
-				},
-				{
-					"type": "X-Created",
-					"value": "2019-01-28T15:31:49Z"
-				},
-				{
-					"type": "X-Modified",
-					"value": "2019-01-28T15:31:49Z"
-				},
-				{
-					"type": "X-Published",
-					"value": "false"
-				},
-				{
-					"type": "X-Versions",
-					"value": "1.0.0"
-				},
-				{
-					"type": "X-Private",
-					"value": "false"
-				},
-				{
-					"type": "X-OASVersion",
-					"value": "3.0.0"
-				},
-				{
-					"type": "X-Notifications",
-					"value": "false"
-				}
-			]
-		},
-		{
-			"name": "Human (and other) Resources",
-			"description": "Retrieve information on Empire staff and subjects",
-			"tags": [],
-			"properties": [
-				{
-					"type": "Swagger",
-					"url": "https://api.swaggerhub.com/apis/The_Empire/Human_etc_Resources/2.0.0"
-				},
-				{
-					"type": "X-Version",
-					"value": "2.0.0"
-				},
-				{
-					"type": "X-Created",
-					"value": "2018-11-08T19:30:06Z"
-				},
-				{
-					"type": "X-Modified",
-					"value": "2018-11-08T20:32:13Z"
-				},
-				{
-					"type": "X-Published",
-					"value": "true"
-				},
-				{
-					"type": "X-GitHub",
-					"url": ""
-				},
-				{
-					"type": "X-DockerHub",
-					"url": ""
-				},
-				{
-					"type": "X-Versions",
-					"value": "*2.0.0"
+					"value": "*1.0.0,2.0.0"
 				},
 				{
 					"type": "X-Private",
