@@ -4,6 +4,7 @@
         "displayName": "Demo",
         "displayTag": "Demo Docker React APIs",
         "displayImage": "/images/layout_set_logo.png",
-        "pathApis":"/apis"
+        "pathApis":"/apis",
+        "fileApis":"apis.json"
     }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom'
 import APILink from './APILink.js'
 
 const Sidebar = props => {
@@ -11,12 +12,13 @@ const Sidebar = props => {
     } else {
         for (let i = 0; i < props.definitionList.length; i++) {
             if (props.definitionList[i].properties[4].value === "true") {
+                
                 apiLinks.push(
+                    <Link to={`/${props.definitionList[i].name}`}>
                     <APILink 
                         key={i}
                         apiLinkData={props.definitionList[i]}
-                        updateDefinitionLink={props.updateDefinitionLink}
-                    />
+                    /></Link>
                 )
             }
         }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SwaggerUI from 'swagger-ui-react';
+import { BrowserRouter as Router, Route, Switch, useParams } from 'react-router-dom'
 import Config from './organization_config.json';
 import Sidebar from './Sidebar.js';
 import  * as Utils from './UtilsFunc.js';
@@ -8,13 +9,14 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isloaded:false,
         organizationConfig: null,
         definitionList:  null,
         definitionLink: ""
       }
       this.swaggerhub = this.swaggerhub.bind(this)
       this.getOrganizationData = this.getOrganizationData.bind(this)
-      this.updateDefinitionLink = this.updateDefinitionLink.bind(this)
+      //this.updateDefinitionLink = this.updateDefinitionLink.bind(this)
     }
 
   componentWillMount() {
@@ -43,11 +45,12 @@ class App extends Component {
   }
 // per leggere il file json apislist creato in locale
   getOrganizationData() {
-    fetch(this.state.organizationConfig.pathApis+"/apis.json")
+    fetch(this.state.organizationConfig.pathApis+"/"+this.state.organizationConfig.fileApis)
     .then((response) => response.json())
     .then((data) =>{
       this.setState({
-        definitionList: data.apis
+        definitionList: data.apis,
+        isloaded:true
       
      })
         
@@ -67,20 +70,24 @@ class App extends Component {
     // })
  // }
 
-  updateDefinitionLink(newLink) {
+  //updateDefinitionLink(newLink) {
 
-    if(!Utils.IsValidHttpUrl(newLink))
-  {
-    newLink=this.state.organizationConfig.pathApis+"/"+newLink;
-  }
-    this.setState({
-      definitionLink: newLink
-    })
-  }
+    //if(!Utils.IsValidHttpUrl(newLink))
+  //{
+  //  newLink=this.state.organizationConfig.pathApis+"/"+newLink;
+  //}
+   // this.setState({
+    //  definitionLink: newLink
+   // })
+  //}
 
 
   render() {
+console.log(this);
+const listdata=this.state;
+  console.log("list:"+listdata);
     return (
+      <Router>
       <div className="App">
         <Sidebar 
           organizationConfig={this.state.organizationConfig}
@@ -88,15 +95,59 @@ class App extends Component {
           updateDefinitionLink={this.updateDefinitionLink}
           getOrganizationData={this.getOrganizationData}
         />
-                <div id="api-data">
+
+
+        <Switch>
+          <Route exact path="/" children={
+            <div id="api-data">
           <SwaggerUI 
             url={this.state.definitionLink}
             docExpansion="list"
-          />
-        </div>
+          /></div>}/>
+                <Route exact path="/:id" children={<Child props={listdata}/>} /> 
+        </Switch>
+        
       </div>
+      </Router>
     );
   }
+
+
+}
+function Child(props) {
+
+let { id } = useParams();
+let params ="";
+let pathApis="";
+let listApis=props.props.definitionList;
+  if( listApis ) 
+{
+  var element=findArrayElementByTitle(listApis,id);
+  pathApis = props.props.organizationConfig.pathApis;
+  if(element)
+  { 
+    if(!Utils.IsValidHttpUrl(element.properties[0].url))
+    {
+    params =pathApis+"/"+element.properties[0].url;
+  }else{
+    params=element.properties[0].url;
+  }
+}
+}
+  return (  
+    <div id="api-data">
+    <SwaggerUI 
+      url={params}
+      docExpansion="list"
+    />
+    </div>
+
+  )
+}
+function findArrayElementByTitle(array, title) {
+  return array.find((element) => {
+    return element.name === title;
+  })
 }
 
 export default App;
