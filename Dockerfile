@@ -19,3 +19,6 @@ COPY . ./
 
 # start app
 CMD ["npm", "start"]
+
+# build app for production with minification
+# RUN npm run build
