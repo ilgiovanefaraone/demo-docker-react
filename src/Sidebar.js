@@ -14,7 +14,7 @@ const Sidebar = props => {
             if (props.definitionList[i].properties[4].value === "true") {
                 
                 apiLinks.push(
-                    <Link to={`/${props.definitionList[i].name}`}>
+                    <Link  key={i} to={`/${props.definitionList[i].name}`}>
                     <APILink 
                         key={i}
                         apiLinkData={props.definitionList[i]}

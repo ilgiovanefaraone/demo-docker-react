@@ -17,8 +17,9 @@ RUN npm install
 # add app
 COPY . ./
 
-# start app
-CMD ["npm", "start"]
+# start app in develop mod 
+#CMD ["npm", "start"]
+
 
 # build app for production with minification
-# RUN npm run build
+ RUN npm run build

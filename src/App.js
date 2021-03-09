@@ -83,9 +83,9 @@ class App extends Component {
 
 
   render() {
-console.log(this);
+//console.log(this);
 const listdata=this.state;
-  console.log("list:"+listdata);
+ // console.log("list:"+listdata);
     return (
       <Router>
       <div className="App">
