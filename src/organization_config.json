@@ -1,8 +1,8 @@
 {
     "orgData": {
         "orgName": "",
-        "displayName": "Demo",
-        "displayTag": "Demo Docker React APIs",
+        "displayName": "Crea API Swagger",
+        "displayTag": "Crea API Swagger - OpenAPI 3",
         "displayImage": "/images/layout_set_logo.png",
         "pathApis":"/apis",
         "fileApis":"apis.json"
